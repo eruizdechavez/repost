@@ -5,6 +5,7 @@ _ = require 'underscore'
 async = require 'async'
 qs = require 'querystring'
 cli = require 'commander'
+util = require 'util'
 
 cli
   .option('-l, --last-post [path]', 'File to read and store last tweeted post', 'last_post')
@@ -115,8 +116,10 @@ post_tweet = (entries, urls, last_post, callback) ->
       consumer_secret: consumer_secret
       token: token
       token_secret: token_secret
-    body: qs.stringify status: status
+    form:
+      status: status
   , (err, response, body) ->
+    console.log "twitter response: #{util.inspect body}"
     callback err, urls[index]
 
 save_last_post = (posted_url, callback) ->
