@@ -105,7 +105,7 @@ post_tweet = (entries, urls, last_post, callback) ->
   index = urls.indexOf last_post
   index = if index - 1 < 0 then urls.length - 1 else index - 1
 
-  status = "#{entries[urls[index]]} - #{urls[index]}"
+  status = "#{entries[urls[index]]} #{urls[index]}"
   console.log "posting tweet: #{status}"
   request
     proxy: proxy
