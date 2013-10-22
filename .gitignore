@@ -3,3 +3,5 @@ npm-debug.log
 last_post
 blacklist
 *.sublime*
+.afignore
+manifest.yml

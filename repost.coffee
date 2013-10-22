@@ -11,7 +11,6 @@ cli
   .option('-l, --last-post [path]', 'File to read and store last tweeted post', 'last_post')
   .option('-b, --blacklist [path]', 'File with an array of blacklisted urls', 'blacklist')
   .option('-f, --feed-url <url>', 'Feed URL (ATOM)')
-  .option('-p, --proxy [url]', 'Proxy URL')
   .option('-k, --consumer-key <key>', 'Your App\'s Twitter Consumer Key')
   .option('-s, --consumer-secret <secret>', 'Your App\'s Twitter Consumer Secret')
   .option('-t, --token <token>', 'Your Twitter Token')
@@ -22,7 +21,6 @@ cli
 last_post_file = cli.lastPost
 blacklist_file = cli.blacklist
 feed_url = cli.feedUrl
-proxy = cli.proxy
 consumer_key = cli.consumerKey
 consumer_secret = cli.consumerSecret
 token = cli.token
@@ -55,7 +53,6 @@ main = ->
 fetch_feed = (callback) ->
   console.log 'fetching feed'
   request
-    proxy: proxy
     url: feed_url
   , (err, response, body) ->
     callback err, body
@@ -102,7 +99,6 @@ post_tweet = (entries, urls, last_post, callback) ->
   status = "#{entries[urls[index]]} #{urls[index]}"
   console.log "posting tweet: #{status}"
   request
-    proxy: proxy
     method: 'post'
     url: 'https://api.twitter.com/1.1/statuses/update.json'
     oauth:
@@ -120,7 +116,6 @@ save_last_post = (posted_url, callback) ->
   console.log 'saving last posted url'
   fs.writeFile last_post_file, posted_url, (err) ->
     callback()
-
 
 if cron_rule?
   new CronJob cron_rule, main, null, true
