@@ -9,7 +9,9 @@
     "underscore": "~1.5.1",
     "xml2js": "~0.2.8",
     "feedparser": "~0.16.1",
-    "commander": "~2.0.0"
+    "commander": "~2.0.0",
+    "coffee-script": "~1.6.3",
+    "cron": "~1.0.1"
   },
   "repository": "https://github.com/erickrdch/repost.git",
   "author": "Erick Ruiz de Chavez <erickrdch@gmail.com>",

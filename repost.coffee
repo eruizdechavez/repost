@@ -3,9 +3,9 @@ xml2js = require 'xml2js'
 fs = require 'fs'
 _ = require 'underscore'
 async = require 'async'
-qs = require 'querystring'
 cli = require 'commander'
 util = require 'util'
+CronJob = require('cron').CronJob
 
 cli
   .option('-l, --last-post [path]', 'File to read and store last tweeted post', 'last_post')
@@ -16,7 +16,7 @@ cli
   .option('-s, --consumer-secret <secret>', 'Your App\'s Twitter Consumer Secret')
   .option('-t, --token <token>', 'Your Twitter Token')
   .option('-S, --token-secret <secret>', 'Your Twitter Token Secret')
-  .option('-K, --keep-posting [milliseconds]', 'Keep the command posting each XXX milliseconds')
+  .option('-c, --cron [CRON-like rule]')
   .parse(process.argv)
 
 last_post_file = cli.lastPost
@@ -27,7 +27,7 @@ consumer_key = cli.consumerKey
 consumer_secret = cli.consumerSecret
 token = cli.token
 token_secret = cli.tokenSecret
-keep_posting = cli.keepPosting
+cron_rule = cli.cron
 
 return console.log 'Missing required params' if not feed_url or not consumer_key or not consumer_secret or not token or not token_secret
 
@@ -51,12 +51,6 @@ main = ->
         , retry_in
       else
         console.log "too many retries"
-    else
-      if keep_posting
-        retry_times = 0
-        retry_in = 5000
-        console.log "repeating in #{keep_posting} milliseconds"
-        setTimeout main, keep_posting
 
 fetch_feed = (callback) ->
   console.log 'fetching feed'
@@ -127,4 +121,8 @@ save_last_post = (posted_url, callback) ->
   fs.writeFile last_post_file, posted_url, (err) ->
     callback()
 
-main()
+
+if cron_rule?
+  new CronJob cron_rule, main, null, true
+else
+  main()

@@ -2,3 +2,4 @@ node_modules
 npm-debug.log
 last_post
 blacklist
+*.sublime*
